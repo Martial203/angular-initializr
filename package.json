@@ -1,0 +1,25 @@
+{
+  "name": "my-initializr-schematics",
+  "version": "0.0.0",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && jasmine src/**/*_spec.js"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^22.1.8",
+    "@angular-devkit/schematics": "^22.1.8",
+    "typescript": "~6.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.19",
+    "@types/jasmine": "~6.0.0",
+    "jasmine": "^6.0.0"
+  }
+}
