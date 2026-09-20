@@ -17,6 +17,15 @@
     "lint-rules": {
       "description": "Define custom linting rules for the project.",
       "factory": "./lint-rules/index#lintRules"
+    },
+    "obfuscator": {
+      "description": "A blank schematic.",
+      "factory": "./obfuscator/index#obfuscator",
+      "schema": "./obfuscator/schema.json"
+    },
+    "csp": {
+      "description": "A blank schematic.",
+      "factory": "./csp/index#csp"
     }
   }
 }

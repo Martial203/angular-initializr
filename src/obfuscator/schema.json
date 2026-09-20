@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "obfuscator-schematics-schema",
+  "title": "Obfuscator Schematic Options",
+  "type": "object",
+  "properties": {
+    "reservedStrings": {
+      "type": "string",
+      "description": "Liste des chaînes réservées à ne pas obfusquer, séparées par des virgules.",
+      "default": "",
+      "x-prompt": "Veuillez entrer les chaînes réservées à ne pas obfusquer, séparées par des virgules (ex: fr,en,de)."
+    }
+  },
+  "required": []
+}
