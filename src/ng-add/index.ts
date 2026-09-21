@@ -11,7 +11,7 @@ export function ngAdd(_options: any): Rule {
     tree;
 
     return chain([
-      schematic('obfuscator', _options)
+      schematic('translation', _options)
     ]);
   };
 }
