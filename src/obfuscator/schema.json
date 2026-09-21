@@ -6,9 +6,9 @@
   "properties": {
     "reservedStrings": {
       "type": "string",
-      "description": "Liste des chaînes réservées à ne pas obfusquer, séparées par des virgules.",
+      "description": "Chaînes de caractères à exclure de l'offuscation (séparées par des virgules).",
       "default": "",
-      "x-prompt": "Veuillez entrer les chaînes réservées à ne pas obfusquer, séparées par des virgules (ex: fr,en,de)."
+      "x-prompt": "Entrez les chaînes à ne pas obfusquer (pour l'injection dynamique de valeurs d'environnement au build par exemple), séparées par des virgules (ex: PLACEHOLDER):"
     }
   },
   "required": []

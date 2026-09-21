@@ -6,13 +6,13 @@
   "properties": {
     "langs": {
       "type": "string",
-      "description": "Liste des langues à configurer, séparées par des virgules.",
+      "description": "Langues à configurer (séparées par des virgules).",
       "default": "fr,en",
       "x-prompt": "Veuillez entrer les langues à configurer, séparées par des virgules (ex: fr,en,de)."
     },
     "ssr": {
       "type": "boolean",
-      "description": "Activer ou désactiver le support Server-Side Rendering (SSR) pour Transloco.",
+      "description": "Support Server-Side Rendering (SSR) actif pour ce projet ?.",
       "default": false,
       "x-prompt": "Votre projet supporte-t-il le Server-Side Rendering (SSR) ?"
     }
