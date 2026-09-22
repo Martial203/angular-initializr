@@ -7,7 +7,6 @@ const PRE_COMMIT_HOOK_PATH = '.husky/pre-commit';
 const SECRET_SCAN_SCRIPT = SCAN_SCRIPT;
 const PRE_COMMIT_SCAN_CONFIG = '.gitleaks.toml';
 
-
 function installDependencies(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
 
@@ -41,12 +40,12 @@ function setupScanHook(_options: any): Rule {
     const trimmedScript = SECRET_SCAN_SCRIPT.trim();
 
     if (!tree.exists(PRE_COMMIT_HOOK_PATH)) {
-      tree.create(PRE_COMMIT_HOOK_PATH, `${trimmedScript}\n`);
+      tree.create(PRE_COMMIT_HOOK_PATH, `${trimmedScript}\n\n`);
     } else {
       const existingContent = tree.read(PRE_COMMIT_HOOK_PATH)!.toString('utf-8');
       if (!existingContent.includes(trimmedScript)) {
         const separator = existingContent.length && !existingContent.endsWith('\n') ? '\n' : '';
-        tree.overwrite(PRE_COMMIT_HOOK_PATH, `${existingContent}${separator}${trimmedScript}\n`);
+        tree.overwrite(PRE_COMMIT_HOOK_PATH, `${existingContent}${separator}${trimmedScript}\n\n`);
       }
     }
 
