@@ -3,10 +3,8 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addPackageJsonDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { DEPENDENCY_SCAN } from './scripts/dependency-scan';
 
-
 const PRE_COMMIT_HOOK_PATH = '.husky/pre-commit';
 const DEPENDENCY_SCAN_SCRIPT = DEPENDENCY_SCAN;
-
 
 function installDependencies(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
