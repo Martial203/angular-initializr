@@ -11,7 +11,7 @@ export function ngAdd(_options: any): Rule {
     tree;
 
     return chain([
-      schematic('lint-rules', _options)
+      schematic('csp', _options)
     ]);
   };
 }

@@ -24,8 +24,9 @@
       "schema": "./obfuscator/schema.json"
     },
     "csp": {
-      "description": "A blank schematic.",
-      "factory": "./csp/index#csp"
+      "description": "Scaffold CSP + security headers for nginx, and a dev/prod index.html split.",
+      "factory": "./csp/index#csp",
+      "schema": "./csp/schema.json"
     },
     "secret-scan": {
       "description": "A blank schematic.",

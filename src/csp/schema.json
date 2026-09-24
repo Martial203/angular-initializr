@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "Csp",
+  "title": "CSP options",
+  "type": "object",
+  "properties": {
+    "allowedOrigins": {
+      "type": "string",
+      "default": "",
+      "description": "Domaines externes autorisés à être contactés par l'app (API, CDN, service tiers), séparés par des espaces.",
+      "x-prompt": "Quels domaines externes votre app doit-elle pouvoir contacter (connect-src) ? (laisser vide si aucun)"
+    },
+    "hardwareFeatures": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["camera", "microphone", "payment", "usb"]
+      },
+      "default": [],
+      "x-prompt": {
+        "message": "Quelles fonctionnalités matérielles votre app doit-elle pouvoir utiliser ? (tout le reste reste bloqué)",
+        "type": "list",
+        "multiselect": true,
+        "items": [
+          { "value": "camera", "label": "Caméra" },
+          { "value": "microphone", "label": "Microphone" },
+          { "value": "payment", "label": "Payment Request API" },
+          { "value": "usb", "label": "USB (WebUSB)" }
+        ]
+      }
+    }
+  }
+}
