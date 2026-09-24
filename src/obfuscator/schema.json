@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "obfuscator-schematics-schema",
+  "title": "Obfuscator Schematic Options",
+  "type": "object",
+  "properties": {
+    "reservedStrings": {
+      "type": "string",
+      "description": "Chaînes de caractères à exclure de l'offuscation (séparées par des virgules).",
+      "default": "",
+      "x-prompt": "Entrez les chaînes à ne pas obfusquer (pour l'injection dynamique de valeurs d'environnement au build par exemple), séparées par des virgules (ex: PLACEHOLDER):"
+    }
+  },
+  "required": []
+}

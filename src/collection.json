@@ -1,0 +1,40 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "A blank schematic.",
+      "factory": "./ng-add/index#ngAdd"
+    },
+    "translation": {
+      "description": "Setup translation and i18n files for the project",
+      "factory": "./translation/index#translation",
+      "schema": "./translation/schema.json"
+    },
+    "e2e-encryption": {
+      "description": "Establish secure end-to-end encryption sessions for the application.",
+      "factory": "./e2e-encryption/index#e2eEncryption"
+    },
+    "lint-rules": {
+      "description": "Define custom linting rules for the project.",
+      "factory": "./lint-rules/index#lintRules"
+    },
+    "obfuscator": {
+      "description": "A blank schematic.",
+      "factory": "./obfuscator/index#obfuscator",
+      "schema": "./obfuscator/schema.json"
+    },
+    "csp": {
+      "description": "Scaffold CSP + security headers for nginx, and a dev/prod index.html split.",
+      "factory": "./csp/index#csp",
+      "schema": "./csp/schema.json"
+    },
+    "secret-scan": {
+      "description": "A blank schematic.",
+      "factory": "./secret-scan/index#secretScan"
+    },
+    "dependency-scan": {
+      "description": "A blank schematic.",
+      "factory": "./dependency-scan/index#dependencyScan"
+    }
+  }
+}

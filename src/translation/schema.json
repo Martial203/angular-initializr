@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "translation-schematics-schema",
+  "title": "Translation Schematic Options",
+  "type": "object",
+  "properties": {
+    "langs": {
+      "type": "string",
+      "description": "Langues à configurer (séparées par des virgules).",
+      "default": "fr,en",
+      "x-prompt": "Veuillez entrer les langues à configurer, séparées par des virgules (ex: fr,en,de)."
+    },
+    "ssr": {
+      "type": "boolean",
+      "description": "Support Server-Side Rendering (SSR) actif pour ce projet ?.",
+      "default": false,
+      "x-prompt": "Votre projet supporte-t-il le Server-Side Rendering (SSR) ?"
+    }
+  },
+  "required": []
+}
