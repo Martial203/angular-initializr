@@ -2,8 +2,9 @@
   "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "ng-add": {
-      "description": "A blank schematic.",
-      "factory": "./ng-add/index#ngAdd"
+      "description": "Point d'entrée : choisit les configurations à ajouter et exécute les schematics correspondants.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
     },
     "translation": {
       "description": "Setup translation and i18n files for the project",
@@ -12,14 +13,15 @@
     },
     "e2e-encryption": {
       "description": "Establish secure end-to-end encryption sessions for the application.",
-      "factory": "./e2e-encryption/index#e2eEncryption"
+      "factory": "./e2e-encryption/index#e2eEncryption",
+      "schema": "./e2e-encryption/schema.json"
     },
     "lint-rules": {
-      "description": "Define custom linting rules for the project.",
+      "description": "Configure ESLint, Prettier et lint-staged avec un hook pre-commit.",
       "factory": "./lint-rules/index#lintRules"
     },
     "obfuscator": {
-      "description": "A blank schematic.",
+      "description": "Obfusque le bundle JavaScript de production (javascript-obfuscator).",
       "factory": "./obfuscator/index#obfuscator",
       "schema": "./obfuscator/schema.json"
     },
@@ -29,11 +31,11 @@
       "schema": "./csp/schema.json"
     },
     "secret-scan": {
-      "description": "A blank schematic.",
+      "description": "Ajoute un hook pre-commit Husky qui détecte les secrets avec gitleaks.",
       "factory": "./secret-scan/index#secretScan"
     },
     "dependency-scan": {
-      "description": "A blank schematic.",
+      "description": "Ajoute un hook pre-commit qui audite les dépendances de production (npm audit).",
       "factory": "./dependency-scan/index#dependencyScan"
     }
   }

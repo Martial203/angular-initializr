@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "e2e-encryption-schematics-schema",
+  "title": "E2E Encryption Schematic Options",
+  "type": "object",
+  "properties": {
+    "handshakeInitEndpointUrl": {
+      "type": "string",
+      "description": "URL du endpoint de négociation de clé (handshake) pour établir la session chiffrée.",
+      "minLength": 1,
+      "x-prompt": "Veuillez entrer l'URL du endpoint de négociation de clé pour la session chiffrée (ex: https://api.example.com/crypto/handshake/init)."
+    }
+  },
+  "required": ["handshakeInitEndpointUrl"]
+}

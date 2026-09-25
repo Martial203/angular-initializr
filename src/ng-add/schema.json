@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "ng-add-schematics-schema",
+  "title": "ng-add Schematic Options",
+  "type": "object",
+  "properties": {
+    "features": {
+      "type": "array",
+      "description": "Configurations à ajouter au projet (chacune correspond à un schematic de la collection).",
+      "items": {
+        "type": "string",
+        "enum": ["translation", "e2e-encryption", "csp", "obfuscator", "lint-rules", "secret-scan", "dependency-scan"]
+      },
+      "uniqueItems": true,
+      "default": [],
+      "x-prompt": {
+        "message": "Quelles configurations souhaitez-vous ajouter à votre projet ?",
+        "type": "list",
+        "multiselect": true,
+        "items": [
+          { "value": "translation", "label": "Traduction / i18n (Transloco + @martiald/translator)" },
+          { "value": "e2e-encryption", "label": "Chiffrement de bout en bout des échanges HTTP (@martiald/e2e-encryption)" },
+          { "value": "csp", "label": "CSP + headers de sécurité (nginx, Dockerfile, index.html dev/prod)" },
+          { "value": "obfuscator", "label": "Obfuscation du bundle de production (javascript-obfuscator)" },
+          { "value": "lint-rules", "label": "Règles de lint, formatage & Code quality (ESLint, Prettier, lint-staged)" },
+          { "value": "secret-scan", "label": "Détection de secrets au pre-commit (Husky + gitleaks)" },
+          { "value": "dependency-scan", "label": "Audit des dépendances au pre-commit (npm audit)" }
+        ]
+      }
+    }
+  },
+  "required": []
+}
