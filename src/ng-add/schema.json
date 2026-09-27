@@ -19,7 +19,7 @@
         "multiselect": true,
         "items": [
           { "value": "translation", "label": "Traduction / i18n (Transloco + @martiald/translator)" },
-          { "value": "e2e-encryption", "label": "Chiffrement de bout en bout des échanges HTTP (@martiald/e2e-encryption)" },
+          { "value": "e2e-encryption", "label": "Chiffrement de bout en bout des échanges HTTP (@martiald/e2e-encryption) — ⚠️ nécessite un backend compatible" },
           { "value": "csp", "label": "CSP + headers de sécurité (nginx, Dockerfile, index.html dev/prod)" },
           { "value": "obfuscator", "label": "Obfuscation du bundle de production (javascript-obfuscator)" },
           { "value": "lint-rules", "label": "Règles de lint, formatage & Code quality (ESLint, Prettier, lint-staged)" },

@@ -105,8 +105,19 @@ function setupE2EEncryptionProviders(_options: any): Rule {
   };
 }
 
+function warnBackendRequirement(_options: any): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
+    _context.logger.warn(
+      `Le endpoint '${_options.handshakeInitEndpointUrl}' doit implémenter le protocole de handshake de ${CRYPTO_PACKAGE_NAME}. ` +
+      `Sans backend compatible, l'établissement de la session chiffrée échouera au démarrage de l'application.`
+    );
+    return tree;
+  };
+}
+
 export function e2eEncryption(_options: any): Rule {
   return chain([
+    warnBackendRequirement(_options),
     installDependencies(_options),
     setupE2EEncryptionProviders(_options)
   ]);
