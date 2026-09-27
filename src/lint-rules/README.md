@@ -3,7 +3,7 @@
 Configure ESLint (angular-eslint) avec un jeu de règles strict, Prettier, et un contrôle automatique des fichiers modifiés à chaque commit via lint-staged.
 
 ```bash
-ng generate my-initializr-schematics:lint-rules
+ng generate @martiald/seto:lint-rules
 ```
 
 Pas d'option.

@@ -3,7 +3,7 @@
 Branche la librairie [`@martiald/e2e-encryption`](https://www.npmjs.com/package/@martiald/e2e-encryption) dans l'application : une session chiffrée est négociée avec le backend au démarrage, puis toutes les requêtes `HttpClient` sont chiffrées et les réponses déchiffrées.
 
 ```bash
-ng generate my-initializr-schematics:e2e-encryption
+ng generate @martiald/seto:e2e-encryption
 ```
 
 ## ⚠️ Prérequis : un backend compatible

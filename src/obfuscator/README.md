@@ -3,7 +3,7 @@
 Ajoute une étape d'obfuscation du JavaScript produit par le build, avec [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator).
 
 ```bash
-ng generate my-initializr-schematics:obfuscator
+ng generate @martiald/seto:obfuscator
 ```
 
 ## Options

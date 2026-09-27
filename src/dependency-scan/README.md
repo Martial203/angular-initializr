@@ -3,7 +3,7 @@
 Bloque le commit si une dépendance **de production** présente une vulnérabilité connue, et génère un rapport HTML lisible.
 
 ```bash
-ng generate my-initializr-schematics:dependency-scan
+ng generate @martiald/seto:dependency-scan
 ```
 
 Pas d'option.

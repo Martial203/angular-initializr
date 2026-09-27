@@ -3,7 +3,7 @@
 Bloque tout commit contenant un secret (clé d'API, mot de passe, token, numéro de carte…) grâce à [gitleaks](https://github.com/gitleaks/gitleaks), exécuté par un hook Husky.
 
 ```bash
-ng generate my-initializr-schematics:secret-scan
+ng generate @martiald/seto:secret-scan
 ```
 
 Pas d'option.

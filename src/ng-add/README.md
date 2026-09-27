@@ -5,7 +5,7 @@ Schematic exécuté par `ng add`. Il demande quelles configurations ajouter au p
 ## Utilisation
 
 ```bash
-ng add my-initializr-schematics
+ng add @martiald/seto
 ```
 
 Un menu à choix multiples s'affiche :
@@ -31,7 +31,7 @@ Chaque schematic sélectionné pose ensuite ses propres questions (URL du handsh
 Les autres options passées en ligne de commande sont transmises telles quelles à chaque schematic sélectionné, ce qui permet une exécution sans prompt (CI, scripts) :
 
 ```bash
-ng add my-initializr-schematics --features=e2e-encryption,secret-scan --handshake-init-endpoint-url=/api/crypto/handshake/init
+ng add @martiald/seto --features=e2e-encryption,secret-scan --handshake-init-endpoint-url=/api/crypto/handshake/init
 ```
 
 ## Ordre d'exécution
@@ -52,4 +52,4 @@ Les trois derniers écrivent dans `.husky/pre-commit` : cet ordre est donc aussi
 
 - **Husky n'est installé que par `secret-scan`.** Si vous choisissez `lint-rules` ou `dependency-scan` sans `secret-scan`, le fichier `.husky/pre-commit` est créé mais Husky n'est pas installé : le hook ne s'exécutera pas.
 - **E2E + CSP :** si l'endpoint de handshake est sur un autre domaine que l'application, ajoutez ce domaine dans les domaines autorisés demandés par `csp` (`connect-src`), sinon le navigateur bloquera le handshake.
-- Chaque schematic peut aussi être lancé seul : `ng generate my-initializr-schematics:<nom>`.
+- Chaque schematic peut aussi être lancé seul : `ng generate @martiald/seto:<nom>`.

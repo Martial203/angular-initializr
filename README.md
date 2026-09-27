@@ -1,11 +1,11 @@
-# my-initializr-schematics
+# SeTo — Secure Toolkit for Angular
 
 Collection de schematics Angular pour démarrer un projet avec une configuration **sécurisée et outillée** dès le premier jour : i18n, chiffrement des échanges, CSP, obfuscation, lint et contrôles au commit.
 
 ## Installation
 
 ```bash
-ng add my-initializr-schematics
+ng add @martiald/seto
 ```
 
 `ng add` affiche la liste des configurations disponibles. Cochez celles que vous voulez : les schematics correspondants s'exécutent ensuite et posent leurs propres questions. Voir [ng-add](src/ng-add/README.md).
@@ -13,7 +13,7 @@ ng add my-initializr-schematics
 Chaque schematic peut aussi être lancé seul :
 
 ```bash
-ng generate my-initializr-schematics:<nom>
+ng generate @martiald/seto:<nom>
 ```
 
 ## Schematics disponibles
@@ -56,11 +56,11 @@ npm test
 Tester sur un vrai projet Angular : compilez, puis depuis le projet cible :
 
 ```bash
-npm link <chemin-vers>/my-initializr-schematics
+npm link <chemin-vers>/seto
 ```
 
 ```bash
-ng generate my-initializr-schematics:ng-add
+ng generate @martiald/seto:ng-add
 ```
 
 ## Publication

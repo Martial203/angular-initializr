@@ -3,7 +3,7 @@
 Met en place l'internationalisation avec [Transloco](https://jsverse.gitbook.io/transloco) et la librairie `@martiald/translator`.
 
 ```bash
-ng generate my-initializr-schematics:translation
+ng generate @martiald/seto:translation
 ```
 
 ## Options

@@ -3,7 +3,7 @@
 Prépare le déploiement de l'application derrière nginx (dans Docker) avec une CSP stricte et les headers de sécurité recommandés, et sépare `index.html` entre dev et prod.
 
 ```bash
-ng generate my-initializr-schematics:csp
+ng generate @martiald/seto:csp
 ```
 
 ## Options

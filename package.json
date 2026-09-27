@@ -1,7 +1,10 @@
 {
-  "name": "my-initializr-schematics",
+  "name": "@martiald/seto",
   "version": "1.0.0",
-  "description": "Collection de schematics Angular pour démarrer un projet sécurisé et outillé : i18n, chiffrement e2e, CSP, obfuscation, lint et contrôles au commit.",
+  "description": "SeTo (Secure Toolkit) — collection de schematics Angular pour démarrer un projet sécurisé et outillé : i18n, chiffrement e2e, CSP, obfuscation, lint et contrôles au commit.",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
