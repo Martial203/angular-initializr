@@ -1,16 +1,29 @@
 {
   "name": "my-initializr-schematics",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "version": "1.0.0",
+  "description": "Collection de schematics Angular pour démarrer un projet sécurisé et outillé : i18n, chiffrement e2e, CSP, obfuscation, lint et contrôles au commit.",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "keywords": [
-    "schematics"
+    "schematics",
+    "angular",
+    "ng-add",
+    "security",
+    "i18n",
+    "csp"
   ],
-  "author": "",
+  "author": "Martial203",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martial203/angular-initializr.git"
+  },
+  "homepage": "https://github.com/Martial203/angular-initializr#readme",
+  "bugs": {
+    "url": "https://github.com/Martial203/angular-initializr/issues"
+  },
   "schematics": "./src/collection.json",
   "dependencies": {
     "@angular-devkit/core": "^22.1.8",
