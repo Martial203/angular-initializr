@@ -1,74 +1,135 @@
 # SeTo — Secure Toolkit for Angular
 
-Collection de schematics Angular pour démarrer un projet avec une configuration **sécurisée et outillée** dès le premier jour : i18n, chiffrement des échanges, CSP, obfuscation, lint et contrôles au commit.
+**SeTo** is a collection of [Angular schematics](https://angular.dev/tools/cli/schematics) that sets up, in a single command, everything an Angular project needs to be **secure and properly tooled from day one**: internationalization, end-to-end encryption, Content Security Policy, production bundle obfuscation, strict linting, and automated commit checks.
+
+Instead of copy-pasting the same configuration by hand on every new project, `ng add` asks a few questions and generates a standardized setup, ready for demanding environments (healthcare, finance, critical infrastructure...).
+
+## Table of contents
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Available schematics](#available-schematics)
+- [How it fits together](#how-it-fits-together)
+- [Prerequisites](#prerequisites)
+- [Non-interactive / CI usage](#non-interactive--ci-usage)
+- [Development](#development)
+- [License](#license)
 
 ## Installation
+
+In an existing Angular project (standalone, generated with `ng new`):
 
 ```bash
 ng add @martiald/seto
 ```
 
-`ng add` affiche la liste des configurations disponibles. Cochez celles que vous voulez : les schematics correspondants s'exécutent ensuite et posent leurs propres questions. Voir [ng-add](src/ng-add/README.md).
+This installs the package and immediately runs the [`ng-add`](src/ng-add/README.md) schematic, which lists the available configurations.
 
-Chaque schematic peut aussi être lancé seul :
+## Quick start
 
-```bash
-ng generate @martiald/seto:<nom>
+`ng add @martiald/seto` shows a multi-select menu:
+
+```
+Which configurations would you like to add to your project?
+ ◯ Translation / i18n (Transloco + @martiald/translator)
+ ◯ End-to-end encryption of HTTP exchanges (@martiald/e2e-encryption) — ⚠️ requires a compatible backend
+ ◯ CSP + security headers (nginx, Dockerfile, dev/prod index.html)
+ ◯ Production bundle obfuscation (javascript-obfuscator)
+ ◯ Lint, formatting & code quality rules (ESLint, Prettier, lint-staged)
+ ◯ Secret detection on pre-commit (Husky + gitleaks)
+ ◯ Dependency audit on pre-commit (npm audit)
 ```
 
-## Schematics disponibles
+Check what you need. Each selected schematic then runs and asks its own questions (languages, allowed domains, handshake URL...) — see the details for each below.
 
-| Schematic | Rôle |
+You can also run a single schematic directly, without going through the menu:
+
+```bash
+ng generate @martiald/seto:<name>
+```
+
+## Available schematics
+
+| Schematic | Role |
 |---|---|
-| [`translation`](src/translation/README.md) | i18n avec Transloco et `@martiald/translator` |
-| [`e2e-encryption`](src/e2e-encryption/README.md) | Chiffrement de bout en bout des requêtes HTTP avec `@martiald/e2e-encryption` (**nécessite un backend compatible**) |
-| [`csp`](src/csp/README.md) | CSP stricte, headers de sécurité nginx, `Dockerfile`, `index.html` dev/prod |
-| [`obfuscator`](src/obfuscator/README.md) | Obfuscation du bundle de production |
-| [`lint-rules`](src/lint-rules/README.md) | ESLint strict, Prettier, lint-staged au commit |
-| [`secret-scan`](src/secret-scan/README.md) | Détection de secrets au commit avec gitleaks (installe Husky) |
-| [`dependency-scan`](src/dependency-scan/README.md) | Audit des dépendances de production au commit |
+| [`translation`](src/translation/README.md) | i18n with Transloco and `@martiald/translator` |
+| [`e2e-encryption`](src/e2e-encryption/README.md) | End-to-end encryption of HTTP requests with `@martiald/e2e-encryption` (**requires a compatible backend**) |
+| [`csp`](src/csp/README.md) | Strict CSP, nginx security headers, `Dockerfile`, dev/prod `index.html` |
+| [`obfuscator`](src/obfuscator/README.md) | Production bundle obfuscation |
+| [`lint-rules`](src/lint-rules/README.md) | Strict ESLint, Prettier, lint-staged on commit |
+| [`secret-scan`](src/secret-scan/README.md) | Secret detection on commit with gitleaks (installs Husky) |
+| [`dependency-scan`](src/dependency-scan/README.md) | Production dependency audit on commit |
 
-## Prérequis
+Each link above leads to the full documentation for that schematic: options, generated files, behavior, troubleshooting.
 
-- Un projet Angular **standalone** (avec `src/app/app.config.ts`), ce qui est le cas par défaut depuis Angular 17.
-- Un dépôt Git, pour les hooks de commit.
-- [gitleaks](https://github.com/gitleaks/gitleaks#installing) sur chaque poste, si vous utilisez `secret-scan`.
-- Un backend qui implémente le protocole de `@martiald/e2e-encryption`, si vous utilisez `e2e-encryption`.
+## How it fits together
 
-## Développement
+The schematics are independent, but a few coupling points are worth knowing before you pick your options:
+
+- **Husky is only installed by `secret-scan`.** If you pick `lint-rules` and/or `dependency-scan` without `secret-scan`, their hooks are written to `.husky/pre-commit` but won't run until Husky is installed.
+- **Fixed execution order**, regardless of selection order in the menu: `translation` → `e2e-encryption` → `csp` → `obfuscator` → `lint-rules` → `secret-scan` → `dependency-scan`. This is also the order of the commit-time checks (lint → secrets → dependencies).
+- **`e2e-encryption` + `csp`:** if the handshake endpoint is on a different domain than the app, add that domain to `csp`'s `allowedOrigins`, otherwise the browser will block the key negotiation.
+- **`obfuscator` + `csp`:** the `Dockerfile` generated by `csp` runs `npm run build`. If you also use `obfuscator`, replace that command with `npm run build:prod` so the image contains the obfuscated bundle.
+- **`e2e-encryption` requires a compatible backend.** This schematic only configures the frontend: without a backend implementing the same handshake protocol, the app shows a blank screen on startup (this is intentional — see [the details](src/e2e-encryption/README.md#comportement-à-connaître)).
+
+## Prerequisites
+
+- A **standalone** Angular project (with `src/app/app.config.ts`), which is the default since Angular 17.
+- A Git repository, for the commit hooks (`lint-rules`, `secret-scan`, `dependency-scan`).
+- [gitleaks](https://github.com/gitleaks/gitleaks#installing) installed on every developer machine, if you use `secret-scan`.
+- A backend implementing the [`@martiald/e2e-encryption`](https://www.npmjs.com/package/@martiald/e2e-encryption) protocol, if you use `e2e-encryption`.
+
+## Non-interactive / CI usage
+
+Every option can be passed on the command line to skip interactive prompts (scripts, CI pipelines, bulk project generation):
+
+```bash
+ng add @martiald/seto \
+  --features=csp,lint-rules,secret-scan,dependency-scan \
+  --allowed-origins="https://api.example.com" \
+  --hardware-features=camera
+```
+
+Options a given schematic doesn't recognize are simply ignored; options it needs but that are missing are still prompted for interactively, unless you use the Angular CLI's `--defaults` / `--skip-confirmation` mode.
+
+## Development
+
+Clone the repo, then install dependencies:
 
 ```bash
 npm install
 ```
 
-Compiler :
+Build the schematics (TypeScript → JavaScript, required before running tests or publishing):
 
 ```bash
 npm run build
 ```
 
-Lancer les tests unitaires (Jasmine) :
+Run the unit tests (Jasmine):
 
 ```bash
 npm test
 ```
 
-Tester sur un vrai projet Angular : compilez, puis depuis le projet cible :
+Test against a real Angular project: build, link the package locally, then from the target project:
 
 ```bash
-npm link <chemin-vers>/seto
-```
-
-```bash
+npm link <path-to>/seto
 ng generate @martiald/seto:ng-add
 ```
 
-## Publication
+### Publishing a new version
 
 ```bash
 npm run build
-```
-
-```bash
 npm publish
 ```
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+---
+
+Built by [Martial](https://github.com/Martial203) · [Issues](https://github.com/Martial203/angular-initializr/issues) · [Source code](https://github.com/Martial203/angular-initializr)

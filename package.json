@@ -1,6 +1,6 @@
 {
   "name": "@martiald/seto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SeTo (Secure Toolkit) — collection de schematics Angular pour démarrer un projet sécurisé et outillé : i18n, chiffrement e2e, CSP, obfuscation, lint et contrôles au commit.",
   "publishConfig": {
     "access": "public"
