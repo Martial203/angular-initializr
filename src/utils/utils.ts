@@ -143,3 +143,62 @@ export function installHusky(_options: any): Rule {
     return tree;
   };
 }
+
+export type InterceptorPosition = 'start' | 'end';
+
+/**
+ * Ajoute un intercepteur fonctionnel dans `provideHttpClient(withInterceptors([...]))` du tableau `providers` :
+ * - `withInterceptors([...])` existe → l'intercepteur y est inséré (en tête ou en fin selon `position`) ;
+ * - `provideHttpClient(...)` existe sans `withInterceptors` → `withInterceptors([interceptor])` est ajouté en argument ;
+ * - pas de `provideHttpClient` → `provideHttpClient(withInterceptors([interceptor]))` est ajouté à la fin des providers.
+ *
+ * Ordre : le premier intercepteur du tableau traite la requête en premier et la réponse en dernier.
+ * `'end'` place donc l'intercepteur au plus près du réseau.
+ *
+ * Ajoute aussi les imports `@angular/common/http` nécessaires (pas celui de l'intercepteur).
+ * Retourne undefined si aucun tableau `providers` n'est trouvé ; le contenu inchangé si l'intercepteur est déjà présent.
+ */
+export function addHttpInterceptor(sourceText: string, interceptor: string, position: InterceptorPosition = 'end'): string | undefined {
+  const sourceFile = ts.createSourceFile('app.config.ts', sourceText, ts.ScriptTarget.Latest, true);
+  const providers = findProvidersArray(sourceFile);
+  if (!providers) return undefined;
+
+  const httpClientCall = providers.elements.find((element): element is ts.CallExpression =>
+    ts.isCallExpression(element) && element.expression.getText(sourceFile) === 'provideHttpClient'
+  );
+
+  let content: string;
+
+  if (!httpClientCall) {
+    content = appendToArrayLiteral(sourceText, providers, [`provideHttpClient(\n      withInterceptors([${interceptor}])\n    )`]);
+    return addNamedImports(content, ['provideHttpClient', 'withInterceptors'], '@angular/common/http');
+  }
+
+  const withInterceptorsCall = httpClientCall.arguments.find((arg): arg is ts.CallExpression =>
+    ts.isCallExpression(arg) && arg.expression.getText(sourceFile) === 'withInterceptors'
+  );
+
+  if (withInterceptorsCall) {
+    const interceptors = withInterceptorsCall.arguments[0];
+    if (!interceptors || !ts.isArrayLiteralExpression(interceptors)) return sourceText;
+    if (interceptors.elements.some((el) => el.getText(sourceFile) === interceptor)) return sourceText;
+
+    if (interceptors.elements.length === 0) {
+      const closePos = interceptors.getEnd() - 1;
+      content = sourceText.slice(0, closePos) + interceptor + sourceText.slice(closePos);
+    } else if (position === 'start') {
+      const firstPos = interceptors.elements[0].getStart(sourceFile);
+      content = sourceText.slice(0, firstPos) + `${interceptor}, ` + sourceText.slice(firstPos);
+    } else {
+      const lastEnd = interceptors.elements[interceptors.elements.length - 1].getEnd();
+      content = sourceText.slice(0, lastEnd) + `, ${interceptor}` + sourceText.slice(lastEnd);
+    }
+  } else {
+    // provideHttpClient(...) sans withInterceptors : on ajoute la feature en dernier argument
+    const closeParenPos = httpClientCall.getEnd() - 1;
+    const separator = httpClientCall.arguments.length > 0 ? ', ' : '';
+    content = sourceText.slice(0, closeParenPos).trimEnd() + `${separator}withInterceptors([${interceptor}])` + sourceText.slice(closeParenPos);
+  }
+
+  return addNamedImports(content, ['withInterceptors'], '@angular/common/http');
+}

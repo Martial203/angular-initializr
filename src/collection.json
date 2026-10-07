@@ -37,6 +37,10 @@
     "dependency-scan": {
       "description": "Ajoute un hook pre-commit qui audite les dépendances de production (npm audit).",
       "factory": "./dependency-scan/index#dependencyScan"
+    },
+    "xss-sanitization": {
+      "description": "Ajoute un intercepteur HTTP qui assainit les données échangées contre les injections XSS (@martiald/xss-sanitization).",
+      "factory": "./xss-sanitization/index#xssSanitization"
     }
   }
 }

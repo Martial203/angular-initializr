@@ -36,7 +36,7 @@ export const appConfig: ApplicationConfig = {
     expect(content).toContain('withInterceptors([encryptionInterceptor])');
     expect(content).toContain(`import { provideE2EEncryption, CryptoService, encryptionInterceptor } from '@martiald/e2e-encryption';`);
     expect(content).toContain(`import { catchError, throwError } from 'rxjs';`);
-    expect(content).toContain(`import { HttpErrorResponse, withInterceptors, provideHttpClient } from '@angular/common/http';`);
+    expect(content).toContain(`import { HttpErrorResponse, provideHttpClient, withInterceptors } from '@angular/common/http';`);
     expect(content).toMatch(/import \{ inject, provideAppInitializer,\s*ApplicationConfig/);
   });
 

@@ -1,7 +1,7 @@
 import { chain, Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import * as ts from 'typescript';
-import { addNamedImports, appendToArrayLiteral, findProvidersArray } from '../utils/utils';
+import { addHttpInterceptor, addNamedImports, appendToArrayLiteral, findProvidersArray } from '../utils/utils';
 
 
 // You don't have to export the function as default. You can also have more than one rule factory
@@ -22,36 +22,6 @@ export function installDependencies(_options: any): Rule {
 
 }
 
-/**
- * Ajoute encryptionInterceptor à un appel provideHttpClient(...) déjà présent dans les providers.
- * Retourne undefined si aucun provideHttpClient n'existe.
- */
-function addInterceptorToExistingHttpClient(content: string, providers: ts.ArrayLiteralExpression, sourceFile: ts.SourceFile): string | undefined {
-  const httpClientCall = providers.elements.find((element): element is ts.CallExpression =>
-    ts.isCallExpression(element) && element.expression.getText(sourceFile) === 'provideHttpClient'
-  );
-  if (!httpClientCall) return undefined;
-
-  const withInterceptorsCall = httpClientCall.arguments.find((arg): arg is ts.CallExpression =>
-    ts.isCallExpression(arg) && arg.expression.getText(sourceFile) === 'withInterceptors'
-  );
-
-  if (withInterceptorsCall) {
-    const interceptors = withInterceptorsCall.arguments[0];
-    if (!interceptors || !ts.isArrayLiteralExpression(interceptors)) return content;
-    if (interceptors.elements.some((el) => el.getText(sourceFile) === 'encryptionInterceptor')) return content;
-
-    const closePos = interceptors.getEnd() - 1;
-    const separator = interceptors.elements.length > 0 ? ', ' : '';
-    return content.slice(0, closePos).trimEnd() + `${separator}encryptionInterceptor` + content.slice(closePos);
-  }
-
-  // provideHttpClient(...) sans withInterceptors : on ajoute la feature en dernier argument
-  const closeParenPos = httpClientCall.getEnd() - 1;
-  const separator = httpClientCall.arguments.length > 0 ? ', ' : '';
-  return content.slice(0, closeParenPos).trimEnd() + `${separator}withInterceptors([encryptionInterceptor])` + content.slice(closeParenPos);
-}
-
 function setupE2EEncryptionProviders(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
 
@@ -66,8 +36,8 @@ function setupE2EEncryptionProviders(_options: any): Rule {
 
     const handshakeUrl = String(_options.handshakeInitEndpointUrl ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
-    let sourceFile = ts.createSourceFile(CONFIG_PATH, content, ts.ScriptTarget.Latest, true);
-    let providers = findProvidersArray(sourceFile);
+    const sourceFile = ts.createSourceFile(CONFIG_PATH, content, ts.ScriptTarget.Latest, true);
+    const providers = findProvidersArray(sourceFile);
 
     if (!providers) {
       _context.logger.warn('Could not find providers array in app.config.ts. Please add the E2E encryption providers manually.');
@@ -79,23 +49,15 @@ function setupE2EEncryptionProviders(_options: any): Rule {
       `provideAppInitializer(() => {\n      const cryptoService = inject(CryptoService);\n      return cryptoService.establishSecureSession().pipe(\n        catchError((err: unknown) => {\n          const error = err as HttpErrorResponse;\n          console.error('Échec critique du Handshake Crypto:', error);\n          return throwError(() => error);\n        })\n      )\n    })`
     ];
 
-    // Si provideHttpClient existe déjà (ex: ajouté par transloco), on l'enrichit au lieu de le dupliquer
-    const httpClientImports = ['HttpErrorResponse', 'withInterceptors'];
-    const updatedContent = addInterceptorToExistingHttpClient(content, providers, sourceFile);
-    if (updatedContent !== undefined) {
-      content = updatedContent;
-      sourceFile = ts.createSourceFile(CONFIG_PATH, content, ts.ScriptTarget.Latest, true);
-      providers = findProvidersArray(sourceFile)!;
-    } else {
-      providerCodes.push(`provideHttpClient(\n      withInterceptors([encryptionInterceptor])\n    )`);
-      httpClientImports.push('provideHttpClient');
-    }
-
     content = appendToArrayLiteral(content, providers, providerCodes);
+
+    // En fin de tableau : au plus près du réseau, pour que les autres intercepteurs (ex: xssSanitizationInterceptor)
+    // travaillent sur le contenu en clair. Réutilise provideHttpClient s'il existe déjà (ex: ajouté par Transloco).
+    content = addHttpInterceptor(content, 'encryptionInterceptor', 'end')!;
 
     content = addNamedImports(content, ['provideE2EEncryption', 'CryptoService', 'encryptionInterceptor'], CRYPTO_PACKAGE_NAME);
     content = addNamedImports(content, ['catchError', 'throwError'], 'rxjs');
-    content = addNamedImports(content, httpClientImports, '@angular/common/http');
+    content = addNamedImports(content, ['HttpErrorResponse'], '@angular/common/http');
     content = addNamedImports(content, ['inject', 'provideAppInitializer'], '@angular/core');
 
     tree.overwrite(CONFIG_PATH, content);
