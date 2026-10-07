@@ -8,6 +8,7 @@ import { chain, noop, Rule, schematic, SchematicContext, Tree } from '@angular-d
 export const AVAILABLE_FEATURES = [
   'translation',
   'e2e-encryption',
+  'xss-sanitization',
   'csp',
   'obfuscator',
   'lint-rules',

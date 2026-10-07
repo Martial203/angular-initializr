@@ -9,7 +9,7 @@
       "description": "Configurations à ajouter au projet (chacune correspond à un schematic de la collection).",
       "items": {
         "type": "string",
-        "enum": ["translation", "e2e-encryption", "csp", "obfuscator", "lint-rules", "secret-scan", "dependency-scan"]
+        "enum": ["translation", "e2e-encryption", "xss-sanitization", "csp", "obfuscator", "lint-rules", "secret-scan", "dependency-scan"]
       },
       "uniqueItems": true,
       "default": [],
@@ -20,6 +20,7 @@
         "items": [
           { "value": "translation", "label": "Traduction / i18n (Transloco + @martiald/translator)" },
           { "value": "e2e-encryption", "label": "Chiffrement de bout en bout des échanges HTTP (@martiald/e2e-encryption) — ⚠️ nécessite un backend compatible" },
+          { "value": "xss-sanitization", "label": "Protection XSS des échanges HTTP (@martiald/xss-sanitization + DOMPurify)" },
           { "value": "csp", "label": "CSP + headers de sécurité (nginx, Dockerfile, index.html dev/prod)" },
           { "value": "obfuscator", "label": "Obfuscation du bundle de production (javascript-obfuscator)" },
           { "value": "lint-rules", "label": "Règles de lint, formatage & Code quality (ESLint, Prettier, lint-staged)" },
