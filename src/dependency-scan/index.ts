@@ -2,6 +2,7 @@ import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics'
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addPackageJsonDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { DEPENDENCY_SCAN } from './scripts/dependency-scan';
+import { installHusky } from '../utils/utils';
 
 const PRE_COMMIT_HOOK_PATH = '.husky/pre-commit';
 const DEPENDENCY_SCAN_SCRIPT = DEPENDENCY_SCAN;
@@ -41,6 +42,7 @@ function setupScanHook(_options: any): Rule {
 
 export function dependencyScan(_options: any): Rule {
   return chain([
+    installHusky(_options),
     installDependencies(_options),
     setupScanHook(_options)
   ]);

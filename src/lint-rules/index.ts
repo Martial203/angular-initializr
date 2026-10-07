@@ -3,6 +3,7 @@ import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schema
 import { addPackageJsonDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { ESLINT_CONFIG } from './scripts/eslint-config';
 import { LINT_SCAN_SCRIPT } from './scripts/lint-scan';
+import { installHusky } from '../utils/utils';
 
 const ESLINT_CONFIG_PATH = 'eslint.config.js';
 const PRE_COMMIT_HOOK_PATH = '.husky/pre-commit';
@@ -154,6 +155,7 @@ function setupLintRules(_options: any): Rule{
 
 export function lintRules(_options: any): Rule {
   return chain([
+    installHusky(_options),
     installDependencies(_options),
     setupLintRules(_options),
     registerLintTarget(_options)

@@ -31,7 +31,7 @@ describe('secret-scan', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
     const tree = await runner.runSchematic('secret-scan', {}, createAppTree());
 
-    expect(tree.readContent('.husky/pre-commit')).toBe(`${SCAN_SCRIPT.trim()}\n`);
+    expect(tree.readContent('.husky/pre-commit')).toBe(`${SCAN_SCRIPT.trim()}\n\n`);
   });
 
   it('creates .gitleaks.toml even on a fresh pre-commit hook', async () => {
@@ -48,9 +48,9 @@ describe('secret-scan', () => {
 
     const tree = await runner.runSchematic('secret-scan', {}, appTree);
 
-    expect(tree.readContent('.husky/pre-commit')).toBe(`npm run test\n${SCAN_SCRIPT.trim()}\n`);
+    expect(tree.readContent('.husky/pre-commit')).toBe(`npm run test\n${SCAN_SCRIPT.trim()}\n\n`);
 
     const treeAfterSecondRun = await runner.runSchematic('secret-scan', {}, tree);
-    expect(treeAfterSecondRun.readContent('.husky/pre-commit')).toBe(`npm run test\n${SCAN_SCRIPT.trim()}\n`);
+    expect(treeAfterSecondRun.readContent('.husky/pre-commit')).toBe(`npm run test\n${SCAN_SCRIPT.trim()}\n\n`);
   });
 });

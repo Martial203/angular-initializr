@@ -10,8 +10,9 @@ Pas d'option.
 
 ## Ce que fait le schematic
 
-1. Installe `audit-export` en dépendance de développement.
-2. Ajoute à `.husky/pre-commit` un contrôle qui :
+1. Installe Husky s'il est absent et s'assure que le script `prepare` l'active.
+2. Installe `audit-export` en dépendance de développement.
+3. Ajoute à `.husky/pre-commit` un contrôle qui :
    - exécute `npm audit --omit=dev --audit-level=low` ;
    - en cas de vulnérabilité, génère `audit-report.html` à la racine du projet, l'ouvre dans le navigateur (Windows, macOS, Linux) et **annule le commit**.
 
@@ -22,4 +23,4 @@ Pas d'option.
 - `npm audit` interroge le registre npm : il faut un accès réseau au moment du commit.
 - Ajoutez `audit-report.html` à votre `.gitignore`.
 - Pour corriger : `npm audit fix`, ou mise à jour manuelle de la dépendance concernée.
-- **Husky n'est pas installé par ce schematic** : il est installé par [`secret-scan`](../secret-scan/README.md). Sans Husky, le hook ne s'exécute pas.
+- Husky est installé s'il est absent (voir [Husky et le script `prepare`](../secret-scan/README.md#husky-et-le-script-prepare)).

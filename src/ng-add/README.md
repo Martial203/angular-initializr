@@ -50,6 +50,6 @@ Les trois derniers écrivent dans `.husky/pre-commit` : cet ordre est donc aussi
 
 ## Bon à savoir
 
-- **Husky n'est installé que par `secret-scan`.** Si vous choisissez `lint-rules` ou `dependency-scan` sans `secret-scan`, le fichier `.husky/pre-commit` est créé mais Husky n'est pas installé : le hook ne s'exécutera pas.
+- **Husky est partagé** par `lint-rules`, `secret-scan` et `dependency-scan` : chacun l'installe s'il est absent, et il n'est installé qu'une seule fois même si les trois sont sélectionnés.
 - **E2E + CSP :** si l'endpoint de handshake est sur un autre domaine que l'application, ajoutez ce domaine dans les domaines autorisés demandés par `csp` (`connect-src`), sinon le navigateur bloquera le handshake.
 - Chaque schematic peut aussi être lancé seul : `ng generate @martiald/seto:<nom>`.

@@ -10,14 +10,15 @@ Pas d'option.
 
 ## Ce que fait le schematic
 
-1. Ajoute en dépendances de développement :
+1. Installe Husky s'il est absent et s'assure que le script `prepare` l'active.
+2. Ajoute en dépendances de développement :
    - `@angular-eslint/schematics` (puis exécute son `ng-add`)
    - `eslint-plugin-rxjs-x`, `eslint-plugin-rxjs-angular-x`
    - `eslint-plugin-unused-imports`, `eslint-plugin-sonarjs`
    - `eslint-config-prettier`, `prettier`, `lint-staged`
-2. Crée (ou écrase) `eslint.config.js`.
-3. Ajoute la cible `lint` dans `angular.json` si elle n'existe pas.
-4. Ajoute au `package.json` :
+3. Crée (ou écrase) `eslint.config.js`.
+4. Ajoute la cible `lint` dans `angular.json` si elle n'existe pas.
+5. Ajoute au `package.json` :
 
 | Script | Rôle |
 |---|---|
@@ -27,7 +28,7 @@ Pas d'option.
 | `npm run format:check` | Vérifie le formatage sans modifier |
 
    ainsi qu'une configuration `lint-staged` (`eslint --fix` sur `.ts`/`.html`, `prettier --write` sur `.ts`/`.html`/`.scss`/`.css`/`.json`).
-5. Ajoute à `.husky/pre-commit` un contrôle `npx lint-staged` qui annule le commit en cas d'erreur.
+6. Ajoute à `.husky/pre-commit` un contrôle `npx lint-staged` qui annule le commit en cas d'erreur.
 
 ## Règles principales (bloquantes)
 
@@ -41,5 +42,5 @@ Pas d'option.
 
 - `eslint.config.js` est **écrasé** s'il existe déjà.
 - Les règles sont pensées pour un **projet neuf**. Sur un projet existant, attendez-vous à beaucoup d'erreurs au premier `npm run lint`.
-- **Husky n'est pas installé par ce schematic** : il est installé par [`secret-scan`](../secret-scan/README.md). Sans Husky, le hook pre-commit ne s'exécute pas.
+- Husky est installé s'il est absent (voir [Husky et le script `prepare`](../secret-scan/README.md#husky-et-le-script-prepare)).
 - Le préfixe de sélecteur `app` est fixe. Modifiez `eslint.config.js` si votre projet en utilise un autre.
