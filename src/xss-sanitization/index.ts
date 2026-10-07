@@ -24,7 +24,7 @@ export function installDependencies(_options: any): Rule {
   };
 }
 
-function setupXssSanitizationInterceptor(_options: any): Rule {
+function setupxssSanitizerInterceptor(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     if (!tree.exists(CONFIG_PATH)) throw new SchematicsException(`Could not find ${CONFIG_PATH}`);
 
@@ -32,20 +32,20 @@ function setupXssSanitizationInterceptor(_options: any): Rule {
 
     // En tête de tableau : l'assainissement doit voir le contenu en clair, donc s'exécuter avant
     // le chiffrement sur la requête et après le déchiffrement sur la réponse (cf. encryptionInterceptor en fin).
-    const updatedContent = addHttpInterceptor(content, 'xssSanitizationInterceptor', 'start');
+    const updatedContent = addHttpInterceptor(content, 'xssSanitizerInterceptor', 'start');
 
     if (updatedContent === undefined) {
-      _context.logger.warn('Could not find providers array in app.config.ts. Please add xssSanitizationInterceptor to withInterceptors manually.');
+      _context.logger.warn('Could not find providers array in app.config.ts. Please add xssSanitizerInterceptor to withInterceptors manually.');
       return tree;
     }
 
     if (updatedContent === content) {
-      _context.logger.info('xssSanitizationInterceptor is already configured in app.config.ts, skipping.');
+      _context.logger.info('xssSanitizerInterceptor is already configured in app.config.ts, skipping.');
       return tree;
     }
 
-    tree.overwrite(CONFIG_PATH, addNamedImports(updatedContent, ['xssSanitizationInterceptor'], XSS_SANITIZATION_PACKAGE_NAME));
-    _context.logger.info('Successfully added xssSanitizationInterceptor to app.config.ts');
+    tree.overwrite(CONFIG_PATH, addNamedImports(updatedContent, ['xssSanitizerInterceptor'], XSS_SANITIZATION_PACKAGE_NAME));
+    _context.logger.info('Successfully added xssSanitizerInterceptor to app.config.ts');
 
     return tree;
   };
@@ -54,6 +54,6 @@ function setupXssSanitizationInterceptor(_options: any): Rule {
 export function xssSanitization(_options: any): Rule {
   return chain([
     installDependencies(_options),
-    setupXssSanitizationInterceptor(_options)
+    setupxssSanitizerInterceptor(_options)
   ]);
 }
